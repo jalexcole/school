@@ -3,6 +3,8 @@
  */
 package programming3;
 
+import java.util.Random;
+
 public class App {
     public String getGreeting() {
         return "Hello World!";
@@ -13,8 +15,48 @@ public class App {
     }
 
     public static int[] collectData() {
-        return new int[0]
+        Random random = new Random(0);
+        int[] g = new int[100000];
+        for (int i = 0; i < g.length; i++) {
+            g[i] = random.nextInt(Integer.MAX_VALUE);
+        }
+        return g;
     }
 
-    public 
+    public static void mergeSort(int[] A, int p, int r) {
+        if (p < r) {
+            int q = (p + r) / 2;
+            mergeSort(A, p, q);
+            mergeSort(A, q+ 1, r);
+            merge(A, p, q, r);
+        }
+    }
+
+    public static void merge(int[] a, int p, int q, int r) {
+        int n1 = q - p + 1;
+        int n2 = r - q;
+        int[] lArray = new int[n1];
+        int[] rArray = new int[n2];
+
+        for (int i = 0; i < lArray.length; i++) {
+
+        }
+
+        for (int j = 0; j < rArray.length; j++) {
+
+        }
+
+        int i = 1;
+        int j = 1;
+
+        for (int k = p; k < r; k++) {
+            if (lArray[i] <= rArray[j]) {
+                a[k] = lArray[i];
+                i++;
+            } else {
+                a[k] = rArray[j];
+                j++;
+            }
+        }
+    }
 }
