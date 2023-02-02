@@ -11,14 +11,19 @@ import java.util.Random;
 
 public class App {
     public String getGreeting() {
-        return "Hello World!";
+        return "\n" +  
+        "-=(o '.\n" +
+        "   '.-.\"\n" +
+        "   /|  \\\n" +
+        "   '|  ||\n" +
+        "    _\\_):,_\n";
     }
 
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
         try {
-            FileWriter fileWriter = new FileWriter("F");
-            for (int n = 1; n < 100_000_000; n += 1500) {
+            FileWriter fileWriter = new FileWriter("test");
+            for (int n = 1; n < 100; n += 1) {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append(n + ", ");
                 Instant start = Instant.now();
