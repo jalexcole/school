@@ -3,6 +3,10 @@
  */
 package programming3;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Random;
 
 public class App {
@@ -12,51 +16,147 @@ public class App {
 
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
+        try {
+            FileWriter fileWriter = new FileWriter("F");
+            for (int n = 1; n < 100_000_000; n += 1500) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(n + ", ");
+                Instant start = Instant.now();
+                sort(collectData(n), 0, n -1);
+                Instant stop = Instant.now();
+                Duration duration = Duration.between(start, stop);
+                Double time = (double) duration.getSeconds() + (Double.valueOf(duration.getNano()) * 1.0e-9);
+                stringBuilder.append(time + ", ");
+                stringBuilder.append(one(time, n) + ", ");
+                stringBuilder.append(two(time, n) + ", ");
+                stringBuilder.append(three(time, n) + "\n");
+                fileWriter.write(stringBuilder.toString());
+            }
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static int[] collectData() {
+    public static double one(double time, int n) {
+        return time / Math.sqrt(n);
+    }
+
+    public static double two(double time, int n) {
+        return time / (n * Math.sqrt(Math.log(n) / Math.log(2)));
+    }
+
+    public static double three(double time, int n) {
+        return time / (n * (Math.log(n) / Math.log(Math.exp(1.0))));
+    }
+
+    public static int[] collectData(int length) {
         Random random = new Random(0);
-        int[] g = new int[100000];
+        int[] g = new int[length];
         for (int i = 0; i < g.length; i++) {
             g[i] = random.nextInt(Integer.MAX_VALUE);
         }
         return g;
     }
 
-    public static void mergeSort(int[] A, int p, int r) {
-        if (p < r) {
-            int q = (p + r) / 2;
-            mergeSort(A, p, q);
-            mergeSort(A, q+ 1, r);
-            merge(A, p, q, r);
+    // public static void mergeSort(int[] A, int p, int r) {
+    // if (p < r) {
+    // int q = (p + r) / 2;
+    // mergeSort(A, p, q);
+    // mergeSort(A, q + 1, r);
+    // merge(A, p, q, r);
+    // }
+    // }
+
+    // public static void merge(int[] a, int p, int q, int r) {
+    // int n1 = q - p + 1;
+    // int n2 = r - q;
+    // int[] lArray = new int[n1];
+    // int[] rArray = new int[n2];
+
+    // for (int i = 0; i < n1; i++) {
+    // lArray[i] = a[p + i ];
+    // }
+
+    // for (int j = 0; j < n2; j++) {
+    // rArray[j] = a[q + j + 1];
+    // }
+
+    // int i = 0;
+    // int j = 0;
+
+    // for (int k = p; k < r; k++) {
+    // if (lArray[i] <= rArray[j]) {
+    // a[k] = lArray[i];
+    // i++;
+    // } else {
+    // a[k] = rArray[j];
+    // j++;
+    // }
+    // }
+    // }
+
+    static void merge(int arr[], int l, int m, int r) {
+        // Find sizes of two subarrays to be merged
+        int n1 = m - l + 1;
+        int n2 = r - m;
+
+        /* Create temp arrays */
+        int L[] = new int[n1];
+        int R[] = new int[n2];
+
+        /* Copy data to temp arrays */
+        for (int i = 0; i < n1; ++i)
+            L[i] = arr[l + i];
+        for (int j = 0; j < n2; ++j)
+            R[j] = arr[m + 1 + j];
+
+        /* Merge the temp arrays */
+
+        // Initial indexes of first and second subarrays
+        int i = 0, j = 0;
+
+        // Initial index of merged subarray array
+        int k = l;
+        while (i < n1 && j < n2) {
+            if (L[i] <= R[j]) {
+                arr[k] = L[i];
+                i++;
+            } else {
+                arr[k] = R[j];
+                j++;
+            }
+            k++;
+        }
+
+        /* Copy remaining elements of L[] if any */
+        while (i < n1) {
+            arr[k] = L[i];
+            i++;
+            k++;
+        }
+
+        /* Copy remaining elements of R[] if any */
+        while (j < n2) {
+            arr[k] = R[j];
+            j++;
+            k++;
         }
     }
 
-    public static void merge(int[] a, int p, int q, int r) {
-        int n1 = q - p + 1;
-        int n2 = r - q;
-        int[] lArray = new int[n1];
-        int[] rArray = new int[n2];
+    // Main function that sorts arr[l..r] using
+    // merge()
+    static void sort(int arr[], int l, int r) {
+        if (l < r) {
+            // Find the middle point
+            int m = l + (r - l) / 2;
 
-        for (int i = 0; i < lArray.length; i++) {
+            // Sort first and second halves
+            sort(arr, l, m);
+            sort(arr, m + 1, r);
 
-        }
-
-        for (int j = 0; j < rArray.length; j++) {
-
-        }
-
-        int i = 1;
-        int j = 1;
-
-        for (int k = p; k < r; k++) {
-            if (lArray[i] <= rArray[j]) {
-                a[k] = lArray[i];
-                i++;
-            } else {
-                a[k] = rArray[j];
-                j++;
-            }
+            // Merge the sorted halves
+            merge(arr, l, m, r);
         }
     }
 }
