@@ -3,6 +3,8 @@
  */
 package programming5;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -15,8 +17,19 @@ public class App {
         System.out.println(new App().getGreeting());
         var a = collectData(10);
         System.out.println("Random Array unsorted:  " + Arrays.toString(a));
+        Instant start = Instant.now();
         System.out.println("Insertion Sorted Array: " + Arrays.toString(insertionSort(a)));
-        System.out.println("Merge Sorted Array:     " + Arrays.toString(mergeSort(a)));
+        Instant stop = Instant.now();
+
+        System.out.println("Insertion sort time: " + Duration.between(start, stop));
+
+        var b = collectData(10);
+        
+        System.out.println("Random Array unsorted:  " + Arrays.toString(b));
+        start = Instant.now();
+        System.out.println("Merge Sorted Array:     " + Arrays.toString(mergeSort(b)));
+        stop = Instant.now();
+        System.out.println("Merge sort time: " + Duration.between(start, stop));
     }
 
     public static int[] collectData(int length) {
